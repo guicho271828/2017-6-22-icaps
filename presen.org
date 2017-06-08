@@ -23,3 +23,11 @@ Made by guicho2.71828 (Masataro Asai)
 #+end_note
 #+end_outline-text-1
 
+* Summary: We discuss *Diversification in Greedy Best First Search* and propose a new method
+
++ Diversification == Exploration == unbiasing the search
+
++ New method highlight: *Fractal-based algorithm*
+
+* Search Diversification
+
