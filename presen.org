@@ -23,11 +23,63 @@ Made by guicho2.71828 (Masataro Asai)
 #+end_note
 #+end_outline-text-1
 
-* Summary: We discuss *Diversification in Greedy Best First Search* and propose a new method
+* Summary: Analyse *Diversification in Greedy Best First Search* and propose a new method
 
-+ Diversification == Exploration == unbiasing the search
++ Diversification = Exploration = unbiasing the search
 
 + New method highlight: *Fractal-based algorithm*
 
 * Search Diversification
+
+[[png:diversify/1]]
+
+** Search Diversification
+[[png:diversify/2]]
+
+** Search Diversification
+[[png:diversify/3]]
+
+** Search Diversification
+[[png:diversify/4]]
+
+** Search Diversification
+[[png:diversify/5]]
+
+** Search Diversification
+
+[[png:diversify/final]]
+
+#+begin_alignright
+An art of How *NOT* to trust the heuristic function and still perform effectively?
+#+end_alignright
+
+* Preliminaries
+
++ Search algorithm sorting strategy [S_1, S_2 ..., *] ::
+     denotes the key for OPEN list in forward search (dictionary order)
++ Default strategy ::
+     =*= in the sorting strategy; either FIFO, LIFO, Random
+
+     Every forward search has some defaulting behavior for tiebreaking
++ Type-based bucket <T_1,T_2...> (Xie14) ::
+     Stores the nodes in a *bucket* according to key values e.g. $\langle g,h\rangle$
+
+     Select a random node in a random bucket when popping a node from OPEN
++ Alternation Queue alt(Q1,Q2...) ::
+     Maintain multiple queues and alternates opening
+
+* Background
+
+There are various *search diversification* approaches...
+
++ Basic GBFS --- [h, *]
++ KBFS
++ Diverse BFS (Imai, Kishimoto)
++ Epsilon-greedy GBFS --- alt([h,*], [Random])
++ Type-based GBFS ---- alt([h,*], <g,h>)
++ GBFS-LS (sometimes run a local search)
+
+
+
+
 
