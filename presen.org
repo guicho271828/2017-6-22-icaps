@@ -6,6 +6,7 @@
 #+LINK: jpg file:img/%s.jpg
 #+LINK: spng file:img/static/%s.png
 #+LINK: sjpg file:img/static/%s.jpg
+#+LINK: sgif file:img/static/%s.gif
 
 #+begin_outline-text-1
 #+begin_center
@@ -60,7 +61,7 @@ An art of How *NOT* to trust the heuristic function and still perform effectivel
 + Default strategy ::
      =*= in the sorting strategy; either FIFO, LIFO, Random
 
-     Every forward search has some defaulting behavior for tiebreaking
+     Every OPEN-list based search has some default tiebreaking
 + Type-based bucket <T_1,T_2...> (Xie14) ::
      Stores the nodes in a *bucket* according to key values e.g. $\langle g,h\rangle$
 
@@ -70,16 +71,281 @@ An art of How *NOT* to trust the heuristic function and still perform effectivel
 
 * Background
 
-There are various *search diversification* approaches...
+There are various *search diversification* approaches
 
 + Basic GBFS --- [h, *]
-+ KBFS
++ KBFS (Expands K nodes at a time)
 + Diverse BFS (Imai, Kishimoto)
-+ Epsilon-greedy GBFS --- alt([h,*], [Random])
-+ Type-based GBFS ---- alt([h,*], <g,h>)
-+ GBFS-LS (sometimes run a local search)
+  + Much more complicated
++ Epsilon-greedy GBFS --- *alt* ([h,*], [Random])
+  + Sometimes runs a random search
++ Type-based GBFS ---- *alt* ([h,*], <g,h>)
+  + Sometimes runs a depth-balanced search
++ GBFS-LE (local expansion)
+  + Runs a randomized search when local minima is detected
+  + GBFS-LS (local search)
+  + GBFS-MRW (Monte-Carlo Random Walk)
+
+#+begin_larger
+#+begin_center
++ *We need a /clean, less ad-hoc/ way to understand their behavior.*
+#+end_center
+#+end_larger
+
+* Heuristic Error
+
+\[
+   \text{Error} = |h - h^*|
+\]
+
+$h$ : heuristic value, $h^*$ : perfect heuristic
+
+$h>h^*$ : Overestimation $h<h^*$ : Underestimation
+
+#+begin_center
+#+begin_larger
++ Is this view sufficient?
+#+end_larger
+#+end_center
+
+** Heuristic Error
+
+[[png:plateau/1]]
+
+#+begin_resume
+This is a plot of the number of the nodes against heuristic value an the perfect heuristic value,
+under a hypothetical heuristic function.
+#+end_resume
+
+** Heuristic Error
+
+[[png:plateau/2]]
+
+#+begin_resume
+As you can see, the nodes that are behind the peak of this plot is the nodes that are underestimated,
+and those that are in front of the peak is those which are overestimated.
+We assume inadmissible heuristics.
+#+end_resume
+
+** Heuristic Error is */2-dimensional/*
+
+[[png:plateau/3]]
+
+#+begin_resume
+however, if we look at the slice of this plot at the x-axis and the y-axis, you
+would notice that this view is too simplistic. The errors between the heuristic
+value and the perfect heuristic is actually distributed along two
+orthogonal axes.
+#+end_resume
+
+** Inter-plateau error
+
+[[png:plateau/4]]
+
+#+begin_resume
+We gave them the separate names: The first one, along heuristic axis, is called inter-plateau error.
+#+end_resume
+
+
+** Intra-plateau error
+
+[[png:plateau/5]]
+
+#+begin_resume
+And the error along the h* axis is called intra-plateau error.
+Since these errors are in the orthogonal axes, they should be treated separately.
+#+end_resume
+
+** Inter-plateau diversification
+
+#+begin_container-fluid
+#+begin_row-fluid
+#+begin_span6
+[[png:plateau/4]]
+#+end_span6
+#+begin_span6
++ *The smallest $h^*$ may have high $h$* (inter-plateau error)
++ *selecting the minimum $h$ is not always good*
++ *Diversifies the next $h$ to expand*
++ DBFS, Type-GBFS, $\epsilon$-greedy
+#+end_span6
+#+end_row-fluid
+#+end_container-fluid
+
+#+begin_resume
+In particular, inte-plateau error should be treated by inter-plateau diversification.
+It is a method whose intuition is as follows:
+#+end_resume
+
+** Intra-plateau diversification
+
+#+begin_container-fluid
+#+begin_row-fluid
+#+begin_span6
+[[png:plateau/6]]
+#+end_span6
+#+begin_span6
++ *The smallest $h$ may have high $h^*$* (intra-plateau error)
++ *Deterministic Tiebreaking e.g. FIFO/LIFO have a pathological cases*
++ *Randomize the search within h-plateau* so that we (hopefully) *expand a low $h^*$ node*
+#+end_span6
+#+end_row-fluid
+#+end_container-fluid
+
+** Let's show!
+
++ IPC11, IPC14 (duplicated domains are excluded), 5min, 4GB
+
++ *Important: Use the same diversification method* for inter-vs-intra
+
++ The cloest we can find: *Type-GBFS* (inter) vs *RandomDepth Tiebreaking* (intra)
+
+  + Intra-plateau diversification == randomized tie breaking
+
+  + Type GBFS: *Randomize <g,h>*
+
+  + RandomDepth <d> : *d ≡ number of steps from the nearest ancestor w/ the same f,h*
+
+  + *g, h, d are all depth-related metrics*
+
+** Intra-vs-Inter are orthogonal & complementary
+
+#+begin_container-fluid
+#+begin_row-fluid
+#+begin_span6
+[[png:icaps17-results]]
+#+end_span6
+#+begin_span6
++ Different domains require different diversification
++ With both modes enabled, effects combine
+#+end_span6
+#+end_row-fluid
+#+end_container-fluid
+
+* What's next?
+
+#+begin_quote
+Type GBFS: *Randomize <g,h>*
+
+RandomDepth <d> : *d ≡ number of steps from the nearest ancestor w/ the same f,h*
+
+*g, h, d are all depth-related metrics*
+#+end_quote
+
+#+begin_xlarge
+Let's diversify the width!
+#+end_xlarge
+
+* Pathological case for all diversification methods
+
+[[png:model/original]]
+
+** FIFO (Breadth-first)
+[[png:model/fifo1]]
+** FIFO (Breadth-first)
+[[png:model/fifo2]]
+** FIFO (Breadth-first)
+[[png:model/fifo3]]
+** LIFO (Depth-first)
+[[png:model/lifo1]]
+** LIFO (Depth-first)
+[[png:model/lifo2]]
+** LIFO (Depth-first)
+[[png:model/lifo3]]
+** Random
+[[png:model/ro1]]
+** Random
+[[png:model/ro2]]
+** Random-Depth
+[[png:model/rd1]]
+** Random-Depth
+[[png:model/rd2]]
+
+* Bond Invasion Percolation (1983)
+
+#+begin_container-fluid
+#+begin_row-fluid
+#+begin_span6
+[[spng:ip]]
+#+end_span6
+#+begin_span6
++ A well-known fractal structure
++ Distribution of fluid slowly invading porous media
++ e.g., water replacing the air in a porous rock
+#+end_span6
+#+end_row-fluid
+#+end_container-fluid
+
+** Bond Invasion Percolation
+
+Bond == Edges
+
+[[sgif:site-bond]]
+
+** TODO Generation of BIP
+
++ Every edge has a unique randomly assigned value
++ Mark the initial node
++ Mark the node connected to the marked node with the least edge value
++ This description is equivalent to the Prim's method for Minimum Spanning Tree
+
+# figure
+
+** How it is implemented
+
+Instead of assigining the random values to all edges (which is infeasible in the implicit graph in classical planning)
+
+Assign a random value to an edge on demand
+
+*IMPORTANT:* The random value is *fixed/memoised* on the edge (never reassigned)
+
+** The */embankmanet effect/* of fixed random edge value
+
+[[png:percolation/embankment]]
+
+** BIP avoids the pathological behavior
+
+[[png:model/bip]]
+
+* Evaluation
+
+
+** Improves the performance as a diversification method (ICAPS17)
+
+Benchmark on FF heuristic
+
+| Diversified FBFS                   | IPC11+IPC14 score |
+|------------------------------------+-------------------|
+| Baseline                           |               192 |
+| (inter + intra plateau) Type-based |             223.9 |
+| (inter + intra plateau) BIP        |           *237.7* |
+
+** blind search characteristics: reduces search width
+
+
+** VS. State-of-the-Art
+
+# mmm... vs Jasper?
+
+
+* Discussion : Advantage over BWFS
+
+IW / BWFS (AAAI17) : 
+
+*Does not assume propositional states* : no need for state-information
 
 
 
+* Discussion : Additional Evaluation: BWFS and GBFS-W in (Lipovetzky AAAI17)
 
+Results obtained from their paper
+
+GBFS-W is intra-plateau, BWFS is inter-plateau
+
+*Effects are expected to combine*
+
+* Conclusion
+
++ *Two modes of diversification* --- previous methods are inter-only / mixture of two
++ *Fractal-based diversification for reducing search width*
 
