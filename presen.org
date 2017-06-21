@@ -62,7 +62,7 @@ An art of How *NOT* to trust the heuristic function and still perform effectivel
      =*= in the sorting strategy; either FIFO, LIFO, Random
 
      Every OPEN-list based search has some default tiebreaking
-+ Type-based bucket <T_1,T_2...> (Xie14) ::
++ Type-based bucket <T_1, T_2 ...> (Xie14) ::
      Stores the nodes in a *bucket* according to key values e.g. $\langle g,h\rangle$
 
      Select a random node in a random bucket when popping a node from OPEN
@@ -75,16 +75,11 @@ There are various *search diversification* approaches
 
 + Basic GBFS --- [h, *]
 + KBFS (Expands K nodes at a time)
-+ Diverse BFS (Imai, Kishimoto)
-  + Much more complicated
-+ Epsilon-greedy GBFS --- *alt* ([h,*], [Random])
-  + Sometimes runs a random search
-+ Type-based GBFS ---- *alt* ([h,*], <g,h>)
-  + Sometimes runs a depth-balanced search
-+ GBFS-LE (local expansion)
-  + Runs a randomized search when local minima is detected
-  + GBFS-LS (local search)
-  + GBFS-MRW (Monte-Carlo Random Walk)
++ Diverse BFS (Imai, AAAI11) (Much more complicated)
++ Epsilon-greedy GBFS --- *alt* ([h,*], [Random]) --- Sometimes runs a random search
++ Type-based GBFS --- *alt* ([h,*], <g,h>) --- Sometimes runs a depth-balanced search
++ GBFS-LE (local expansion) --- Runs a randomized search when local minima is detected
+  + GBFS-LS (local search), GBFS-MRW (Monte-Carlo Random Walk)
 
 #+begin_larger
 #+begin_center
@@ -185,7 +180,7 @@ It is a method whose intuition is as follows:
 [[png:plateau/6]]
 #+end_span6
 #+begin_span6
-+ *The smallest $h$ may have high $h^*$* (intra-plateau error)
++ *The smallest $h$  may have high $h^*$* (intra-plateau error)
 + *Deterministic Tiebreaking e.g. FIFO/LIFO have a pathological cases*
 + *Randomize the search within h-plateau* so that we (hopefully) *expand a low $h^*$ node*
 #+end_span6
@@ -278,9 +273,12 @@ Let's diversify the width!
 [[spng:ip]]
 #+end_span6
 #+begin_span6
-+ A well-known fractal structure
+#+begin_larger
++ A well-known *fractal structure*
 + Distribution of fluid slowly invading porous media
-+ e.g., water replacing the air in a porous rock
++ e.g., water replacing the oil in a porous rock
++ Application: oil reservoir mining
+#+end_larger
 #+end_span6
 #+end_row-fluid
 #+end_container-fluid
@@ -294,9 +292,11 @@ Let's diversify the width!
 [[sgif:site-bond]]
 #+end_span6
 #+begin_span6
+#+begin_larger
 Bond == Edge
 
 Site == Node
+#+end_larger
 #+end_span6
 #+end_row-fluid
 #+end_container-fluid
@@ -304,6 +304,7 @@ Site == Node
 
 ** TODO Generation of BIP
 
+Shown (Barabasi 96) to be the *same algorithm* as Prim's method for Minimum Spanning Tree (Prim '57)
 
 #+begin_src sh
 push(init, OPEN, 0)
@@ -321,12 +322,10 @@ while (s = pop(OPEN)); do
 done
 #+end_src
 
-#+begin_smaller
-BIP generation algorithm == Prim's method for Minimum Spanning Tree
-#+end_smaller
-
 #+begin_larger
+#+begin_center
 + *IMPORTANT:* The random value is *fixed/memoised* on the edge (never reassigned)
+#+end_center
 #+end_larger
 
 ** The */embankmanet effect/* of fixed random edge value
@@ -367,26 +366,34 @@ BIP generation algorithm == Prim's method for Minimum Spanning Tree
 * Evaluation
 
 
-** Improves the performance as a diversification method (ICAPS17)
+#+begin_container-fluid
+#+begin_row-fluid
+#+begin_span6
+[[png:icaps17-results2]]
+#+end_span6
+#+begin_span6
++ hb :: use BIP for *intra-plateau*
++ hB :: use BIP for *inter-plateau*
++ hbB :: use BIP for *both*
 
-Benchmark on FF heuristic
+Results:
 
-| Diversified FBFS                   | IPC11+IPC14 score |
-|------------------------------------+-------------------|
-| Baseline                           |               192 |
-| (inter + intra plateau) Type-based |             223.9 |
-| (inter + intra plateau) BIP        |           *237.7* |
-
-** Same orthogonality was observed
-
-
-
-** vs Depth-based diversification : Improvements were observed in different domains
-
-because Type-GBFS/RandomDepth diversifies wrto depth, BIP diversifies wrto width
++ For CG heuristic, improves performance but not much as hdD
++ For FF heuristic, outperforms hdD
++ Again, inter/intra orthogonality was observed
++ vs hdD: Improvements in different domains
+  + because Type-GBFS/RandomDepth diversifies wrto depth, BIP diversifies wrto width
+#+end_span6
+#+end_row-fluid
+#+end_container-fluid
 
 ** blind search characteristics: reduces search width
 
+Matches the pathological case description
+
+　
+
+[[png:percolation/width-reduction]]
 
 ** VS. State-of-the-Art
 
