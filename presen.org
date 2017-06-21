@@ -202,9 +202,11 @@ It is a method whose intuition is as follows:
 
   + Intra-plateau diversification == randomized tie breaking
 
-  + Type GBFS: *Randomize <g,h>*
+  + Type GBFS --- *Randomize <g,h>*
 
-  + RandomDepth <d> : *d ≡ number of steps from the nearest ancestor w/ the same f,h*
+  + RandomDepth --- *Randomize <d> within plateau*
+
+    + d ≡ number of steps from the nearest ancestor w/ the same f,h
 
   + *g, h, d are all depth-related metrics*
 
@@ -216,8 +218,15 @@ It is a method whose intuition is as follows:
 [[png:icaps17-results]]
 #+end_span6
 #+begin_span6
++ hd (RandomDepth Tiebreaking) :: Randomize <d> in plateau
++ hD (Type GBFS) :: Randomize <g,h>
++ hdD :: */RandomDepth + Type GBFS/*
+
+Results:
+
 + Different domains require different diversification
-+ With both modes enabled, effects combine
++ *With both modes enabled, /effects combine/*
++ *Whenever you have a diversification method, use it for both modes*
 #+end_span6
 #+end_row-fluid
 #+end_container-fluid
@@ -276,36 +285,84 @@ Let's diversify the width!
 #+end_row-fluid
 #+end_container-fluid
 
-** Bond Invasion Percolation
+** Physics people use the different term
 
-Bond == Edges
 
+#+begin_container-fluid
+#+begin_row-fluid
+#+begin_span6
 [[sgif:site-bond]]
+#+end_span6
+#+begin_span6
+Bond == Edge
+
+Site == Node
+#+end_span6
+#+end_row-fluid
+#+end_container-fluid
+
 
 ** TODO Generation of BIP
 
-+ Every edge has a unique randomly assigned value
-+ Mark the initial node
-+ Mark the node connected to the marked node with the least edge value
-+ This description is equivalent to the Prim's method for Minimum Spanning Tree
 
-# figure
+#+begin_src sh
+push(init, OPEN, 0)
 
-** How it is implemented
+while (s = pop(OPEN)); do
+   mark(s)                           # mark as visited
+   for (edge,t) in expand(s); do     # expand
 
-Instead of assigining the random values to all edges (which is infeasible in the implicit graph in classical planning)
+      if value(edge) is unset ; then
+         value(edge) = random()      # assign a random value
+      fi
 
-Assign a random value to an edge on demand
+      push(t, OPEN, value(edge))     # insert
+   done
+done
+#+end_src
 
-*IMPORTANT:* The random value is *fixed/memoised* on the edge (never reassigned)
+#+begin_smaller
+BIP generation algorithm == Prim's method for Minimum Spanning Tree
+#+end_smaller
+
+#+begin_larger
++ *IMPORTANT:* The random value is *fixed/memoised* on the edge (never reassigned)
+#+end_larger
 
 ** The */embankmanet effect/* of fixed random edge value
 
+#+begin_container-fluid
+#+begin_row-fluid
+#+begin_span6
 [[png:percolation/embankment]]
+#+end_span6
+#+begin_span6
+#+begin_larger
++ */Embankment/ : A region surrounded by high-valued edges preventing the invasion*
+
++ */Fixation/ of random values ensures the fractal structure*
+
++ */BIP != Random heuristics/ (create new value every time = break the embankment)*
+#+end_larger
+#+end_span6
+#+end_row-fluid
+#+end_container-fluid
 
 ** BIP avoids the pathological behavior
 
-[[png:model/bip]]
+[[png:model/bip1]]
+
+** BIP avoids the pathological behavior
+
+[[png:model/bip1-1]]
+
+** BIP avoids the pathological behavior
+
+[[png:model/bip2]]
+
+** BIP avoids the pathological behavior
+
+[[png:model/bip2-1]]
 
 * Evaluation
 
@@ -320,6 +377,14 @@ Benchmark on FF heuristic
 | (inter + intra plateau) Type-based |             223.9 |
 | (inter + intra plateau) BIP        |           *237.7* |
 
+** Same orthogonality was observed
+
+
+
+** vs Depth-based diversification : Improvements were observed in different domains
+
+because Type-GBFS/RandomDepth diversifies wrto depth, BIP diversifies wrto width
+
 ** blind search characteristics: reduces search width
 
 
@@ -328,15 +393,13 @@ Benchmark on FF heuristic
 # mmm... vs Jasper?
 
 
-* Discussion : Advantage over BWFS
+* Extra Discussion : Advantage over BWFS (Lipovetzky AAAI17)
 
 IW / BWFS (AAAI17) : 
 
 *Does not assume propositional states* : no need for state-information
 
-
-
-* Discussion : Additional Evaluation: BWFS and GBFS-W in (Lipovetzky AAAI17)
+* Extra Discussion : Additional Evaluation: BWFS and GBFS-W in (Lipovetzky AAAI17)
 
 Results obtained from their paper
 
