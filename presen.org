@@ -73,12 +73,12 @@ An art of How *NOT* to trust the heuristic function and still perform effectivel
 
 There are a bunch of *search diversification* approaches
 
-+ Basic GBFS --- [h, *]
 + Diverse BFS (Imai, AAAI11) (Much more complicated)
++ Monte-Carlo Random Walk (MRW) --- Sometimes runs a random walk
 + Epsilon-greedy GBFS --- *alt* ([h,*], [Random]) --- Sometimes runs a random search
 + Type-based GBFS --- *alt* ([h,*], <g,h>) --- Sometimes runs a depth-balanced search
 + GBFS-LE (local expansion) --- Runs a randomized search when local minima is detected
-  + GBFS-LS (local search), GBFS-MRW (Monte-Carlo Random Walk)
+  + GBFS-LS (local search), GBFS-MRW
 
 #+begin_larger
 #+begin_center
