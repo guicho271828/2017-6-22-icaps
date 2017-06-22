@@ -86,6 +86,12 @@ blockquote {
     line-height:110%;
     margin: auto;
     padding: auto;
+    th,td {
+      padding: {
+         top : 0.05em;
+         bottom : 0.05em;
+      }
+    }
 }
 
 .larger {
