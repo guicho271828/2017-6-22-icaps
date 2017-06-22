@@ -302,7 +302,7 @@ Site == Node
 #+end_container-fluid
 
 
-** TODO Generation of BIP
+** Generation of BIP
 
 Shown (Barabasi 96) to be the *same algorithm* as Prim's method for Minimum Spanning Tree (Prim '57)
 
@@ -397,25 +397,70 @@ Matches the pathological case description
 
 ** VS. State-of-the-Art
 
-# mmm... vs Jasper?
+
+#+begin_container-fluid
+#+begin_row-fluid
+#+begin_span7
+[[png:icaps17-results3]]
+#+end_span7
+#+begin_span5
++ db^2 DB : Alternates D,B for inter-plateau ; d,b for intra-plateau
++ Because *depth (d,D)* and *width (b,B)* has the different effect
++ Effects mostly combine
+#+end_span5
+#+end_row-fluid
+#+end_container-fluid
 
 
 * Extra Discussion : Advantage over BWFS (Lipovetzky AAAI17)
 
 IW / BWFS (AAAI17) : 
 
-*Does not assume propositional states* : no need for state-information
 
 * Extra Discussion : Additional Evaluation: BWFS and GBFS-W in (Lipovetzky AAAI17)
 
-Results obtained from their paper
 
-GBFS-W is intra-plateau, BWFS is inter-plateau
+#+begin_container-fluid
+#+begin_row-fluid
+#+begin_span6
+#+begin_smaller
+| / |       | <         |           | >         | <        |          | >        |
+|   |       | <c>       | <c>       | <c>       | <c>      | <c>      | <c>      |
+|   |       | GBFS      | GBFS-W    | BFWS      | GBFS     | GBFS-W   | BFWS     |
+|   |       | (h^{add}) | (h^{add}) | (h^{add}) | (h^{ff}) | (h^{ff}) | (h^{ff}) |
+|---+-------+-----------+-----------+-----------+----------+----------+----------|
+|   | barm  | 0         | 0         | */16/*    | 0        | 0        | */10/*   |
+|   | caved | 5         | *6*       | *6*       | 6        | 6        | 5        |
+|   | child | 0         | 0         | 0         | 0        | 0        | 0        |
+|   | cityc | 0         | *6*       | *6*       | 0        | *4*      | *5*      |
+|   | floor | 2         | 2         | 2         | 2        | 2        | 2        |
+|   | GED   | 0         | *10*      | *16*      | 16       | 13       | */18/*   |
+|   | hikin | 8         | 7         | 8         | 2        | *7*      | *9*      |
+|   | maint | 16        | 16        | 16        | 11       | _/16/_   | 11       |
+|   | opens | 0         | 0         | 0         | 5        | 0        | 5        |
+|   | park  | 0         | 0         | 0         | 0        | 0        | 0        |
+|   | tetri | 1         | _/9/_     | 3         | 1        | _/9/_    | 1        |
+|   | thoug | 13        | 9         | */20/*    | 12       | 11       | */18/*   |
+|   | trans | 2         | *5*       | *6*       | 0        | 0        | 0        |
+|   | visit | 0         | _/8/_     | 1         | 0        | *20*     | *20*     |
+#+end_smaller
+#+end_span6
+#+begin_span6
+Results obtained from (Lipovetzky AAAI17)
 
-*Effects are expected to combine*
++ */GBFS-W is intra-plateau/*
++ _/BFWS is inter-plateau [w,h]/_
++ Effects are (mostly) orthogonal
++ *Effects are expected to combine with both enabled*
++ Difference between BIP and IW
+  + *IW assumes propositional states*, BIP does not
+#+end_span6
+#+end_row-fluid
+#+end_container-fluid
 
 * Conclusion
 
-+ *Two modes of diversification* --- previous methods are inter-only / mixture of two
+#+begin_larger
++ *Two modes of diversification* --- previous methods are inter-only / mixture of two, no cleanly separated evaluation
 + *Fractal-based diversification for reducing search width*
-
+#+end_larger
