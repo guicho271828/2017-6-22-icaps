@@ -28,7 +28,7 @@ Made by guicho2.71828 (Masataro Asai)
 
 + Diversification = Exploration = unbiasing the search
 
-+ New method highlight: *Fractal-based algorithm*
++ New method highlight: *First effective Fractal-based algorithm ever!*
 
 * Search Diversification
 
@@ -71,10 +71,9 @@ An art of How *NOT* to trust the heuristic function and still perform effectivel
 
 * Background
 
-There are various *search diversification* approaches
+There are a bunch of *search diversification* approaches
 
 + Basic GBFS --- [h, *]
-+ KBFS (Expands K nodes at a time)
 + Diverse BFS (Imai, AAAI11) (Much more complicated)
 + Epsilon-greedy GBFS --- *alt* ([h,*], [Random]) --- Sometimes runs a random search
 + Type-based GBFS --- *alt* ([h,*], <g,h>) --- Sometimes runs a depth-balanced search
@@ -83,11 +82,13 @@ There are various *search diversification* approaches
 
 #+begin_larger
 #+begin_center
-+ *We need a /clean, less ad-hoc/ way to understand their behavior.*
++ *We need a /cleaner, less ad-hoc/ way*
+
+  *to understand their behavior.*
 #+end_center
 #+end_larger
 
-* Heuristic Error
+* Traditional Understanding : Heuristic Error
 
 \[
    \text{Error} = |h - h^*|
@@ -151,7 +152,7 @@ And the error along the h* axis is called intra-plateau error.
 Since these errors are in the orthogonal axes, they should be treated separately.
 #+end_resume
 
-** Inter-plateau diversification
+** Inter-plateau error & diversification
 
 #+begin_container-fluid
 #+begin_row-fluid
@@ -172,7 +173,7 @@ In particular, inte-plateau error should be treated by inter-plateau diversifica
 It is a method whose intuition is as follows:
 #+end_resume
 
-** Intra-plateau diversification
+** Intra-plateau error & diversification
 
 #+begin_container-fluid
 #+begin_row-fluid
@@ -221,7 +222,7 @@ Results:
 
 + Different domains require different diversification
 + *With both modes enabled, /effects combine/*
-+ *Whenever you have a diversification method, use it for both modes*
++ _/Take-home message: Whenever you have a diversification method, use it for both modes!/_
 #+end_span6
 #+end_row-fluid
 #+end_container-fluid
@@ -275,7 +276,7 @@ Let's diversify the width!
 #+begin_span6
 #+begin_larger
 + A well-known *fractal structure*
-+ Distribution of fluid slowly invading porous media
++ Distribution of fluid slowly invading a porous media
 + e.g., water replacing the oil in a porous rock
 + Application: oil reservoir mining
 #+end_larger
@@ -302,7 +303,7 @@ Site == Node
 #+end_container-fluid
 
 
-** Generation of BIP
+** Generation of BIP (blind search method)
 
 Shown (Barabasi 96) to be the *same algorithm* as Prim's method for Minimum Spanning Tree (Prim '57)
 
@@ -311,8 +312,9 @@ push(init, OPEN, 0)
 
 while (s = pop(OPEN)); do
    mark(s)                           # mark as visited
-   for (edge,t) in expand(s); do     # expand
+   for (edge,t) in expand(s); do     # an edge & successor t (unmarked ones only)
 
+      # Each edge has a value
       if value(edge) is unset ; then
          value(edge) = random()      # assign a random value
       fi
@@ -324,26 +326,26 @@ done
 
 #+begin_larger
 #+begin_center
-+ *IMPORTANT:* The random value is *fixed/memoised* on the edge (never reassigned)
++ *IMPORTANT:* The random value is *fixed/memoised* on the edge (*never reassigned*)
 #+end_center
 #+end_larger
 
-** The */embankmanet effect/* of fixed random edge value
+** The */embankment effect/* of fixed random edge value
 
 #+begin_container-fluid
 #+begin_row-fluid
-#+begin_span6
+#+begin_span5
 [[png:percolation/embankment]]
-#+end_span6
-#+begin_span6
+#+end_span5
+#+begin_span7
 #+begin_larger
 + */Embankment/ : A region surrounded by high-valued edges preventing the invasion*
 
-+ */Fixation/ of random values ensures the fractal structure*
++ */Fixation/ of random values maintains the fractal structure*
 
-+ */BIP != Random heuristics/ (create new value every time = break the embankment)*
++ */BIP != Random heuristics/ (reassigns a new value = break the embankment)*
 #+end_larger
-#+end_span6
+#+end_span7
 #+end_row-fluid
 #+end_container-fluid
 
@@ -372,24 +374,21 @@ done
 [[png:icaps17-results2]]
 #+end_span6
 #+begin_span6
-+ hb :: use BIP for *intra-plateau*
-+ hB :: use BIP for *inter-plateau*
-+ hbB :: use BIP for *both*
-
-Results:
-
-+ For CG heuristic, improves performance but not much as hdD
-+ For FF heuristic, outperforms hdD
-+ Again, inter/intra orthogonality was observed
-+ vs hdD: Improvements in different domains
-  + because Type-GBFS/RandomDepth diversifies wrto depth, BIP diversifies wrto width
++ *hb* : *intra-plateau* (by [h, BIP, *])
++ *hB* : *inter-plateau* (by *alt* ([BIP], [h,*]))
++ *hbB* : *both* (by *alt* ([BIP], [h,BIP,*]) )
++ *hdD* : *RandomDepth + Type GBFS*
++ _/Inter/intra orthogonality/_ was observed again
++ vs hdD (depth-based diversifications): competitive results
+  + Improvements in *different domains*
+  + hdD diversifies wrto *depth*, hbB diversifies wrto *width*
 #+end_span6
 #+end_row-fluid
 #+end_container-fluid
 
-** blind search characteristics: reduces search width
+** Blind search characteristics: reduces the search width
 
-Matches the pathological case description
+Matches our description on pathological cases
 
 　
 
@@ -405,20 +404,15 @@ Matches the pathological case description
 #+end_span7
 #+begin_span5
 + db^2 DB : Alternates D,B for inter-plateau ; d,b for intra-plateau
-+ Because *depth (d,D)* and *width (b,B)* has the different effect
-+ Effects mostly combine
++ Because *depth (d,D)* and *width (b,B)* has the different effects
++ Effects mostly combine and improved LAMA
 #+end_span5
 #+end_row-fluid
 #+end_container-fluid
 
+* Extra Discussion: BWFS and GBFS-W in (Lipovetzky AAAI17)
 
-* Extra Discussion : Advantage over BWFS (Lipovetzky AAAI17)
-
-IW / BWFS (AAAI17) : 
-
-
-* Extra Discussion : Additional Evaluation: BWFS and GBFS-W in (Lipovetzky AAAI17)
-
+Results obtained from (Lipovetzky AAAI17)
 
 #+begin_container-fluid
 #+begin_row-fluid
@@ -446,21 +440,30 @@ IW / BWFS (AAAI17) :
 #+end_smaller
 #+end_span6
 #+begin_span6
-Results obtained from (Lipovetzky AAAI17)
 
-+ */GBFS-W is intra-plateau/*
-+ _/BFWS is inter-plateau [w,h]/_
-+ Effects are (mostly) orthogonal
-+ *Effects are expected to combine with both enabled*
-+ Difference between BIP and IW
-  + *IW assumes propositional states*, BIP does not
++ _/GBFS-W is intra-plateau/_
++ */BFWS is inter-plateau [w,h]/*
++ Improvements in different domains
+  + Effects are (mostly) orthogonal
++ *Effects are expected to combine with both enabled.*
++ */Benefit of understanding the diversification !!/*
 #+end_span6
 #+end_row-fluid
 #+end_container-fluid
+
+Difference between BIP and IW : *IW assumes propositional states*, BIP does not
 
 * Conclusion
 
 #+begin_larger
 + *Two modes of diversification* --- previous methods are inter-only / mixture of two, no cleanly separated evaluation
-+ *Fractal-based diversification for reducing search width*
+  + */Take-home message/: Whenever you have a diversification method, use it for both modes*
++ *Fractal-based diversification for reducing the search width*
+  + */Take-home message/: Fractals have some potential!*
 #+end_larger
+
+#+begin_center
+#+begin_larger
++ Thank you for listening!
+#+end_larger
+#+end_center

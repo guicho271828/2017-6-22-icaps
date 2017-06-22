@@ -179,7 +179,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="191.03072"
+     inkscape:cx="190.52564"
      inkscape:cy="174.97128"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -694,25 +694,6 @@
        inkscape:connector-curvature="0" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="20.621529"
-       y="-119.01529"
-       id="text4508"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="20.621529"
-         y="-119.01529"
-         id="tspan4512">higher random</tspan><tspan
-         sodipodi:role="line"
-         x="20.621529"
-         y="-100.26529"
-         id="tspan4514">value with</tspan><tspan
-         sodipodi:role="line"
-         x="20.621529"
-         y="-81.515289"
-         id="tspan4926">1/2 probability</tspan></text>
-    <text
-       xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="46.25621"
        y="0.54564172"
@@ -733,5 +714,35 @@
          id="tspan4922"
          x="20.537926"
          y="72.24617">0.4</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25px;line-height:125%;font-family:'Nimbus Roman No9 L';-inkscape-font-specification:'Nimbus Roman No9 L';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="52.946411"
+       y="-159.42139"
+       id="text4508"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="52.946411"
+         y="-159.42139"
+         id="tspan4512"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:'Nimbus Roman No9 L';-inkscape-font-specification:'Nimbus Roman No9 L'"><tspan
+   style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Nimbus Roman No9 L';-inkscape-font-specification:'Nimbus Roman No9 L Bold Italic'"
+   id="tspan6030">IH</tspan><tspan
+   style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:64.99999762%;font-family:'Nimbus Roman No9 L';-inkscape-font-specification:'Nimbus Roman No9 L Bold Italic';baseline-shift:sub"
+   id="tspan6026">1</tspan> value is higher</tspan><tspan
+         sodipodi:role="line"
+         x="52.946411"
+         y="-133.96245"
+         id="tspan4514"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:'Nimbus Roman No9 L';-inkscape-font-specification:'Nimbus Roman No9 L'">than <tspan
+   style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Nimbus Roman No9 L';-inkscape-font-specification:'Nimbus Roman No9 L Bold Italic'"
+   id="tspan6038">IL</tspan><tspan
+   style="font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:64.99999762%;font-family:'Nimbus Roman No9 L';-inkscape-font-specification:'Nimbus Roman No9 L Bold Italic';baseline-shift:sub"
+   id="tspan6028">1</tspan> with</tspan><tspan
+         sodipodi:role="line"
+         x="52.946411"
+         y="-108.50349"
+         id="tspan4926"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:'Nimbus Roman No9 L';-inkscape-font-specification:'Nimbus Roman No9 L'">1/2 probability</tspan></text>
   </g>
 </svg>
