@@ -56,18 +56,15 @@ An art of How *NOT* to trust the heuristic function and still perform effectivel
 
 * Preliminaries
 
-+ Search algorithm sorting strategy [S_1, S_2 ..., *] ::
-     denotes the key for OPEN list in forward search (dictionary order)
-+ Default strategy ::
-     =*= in the sorting strategy; either FIFO, LIFO, Random
-
-     Every OPEN-list based search has some default tiebreaking
++ Search algorithm sorting strategy [S_1, S_2 ..., ＊] ::
+     the sorting key for OPEN list (lexcographical order)
++ Default strategy =＊= ::
+     FIFO (queue), LIFO (stack) or Random; Exists for every OPEN-list
++ Plateau :: Nodes that are tied with =＊=
 + Type-based bucket <T_1, T_2 ...> (Xie14) ::
-     Stores the nodes in a *bucket* according to key values e.g. $\langle g,h\rangle$
-
-     Select a random node in a random bucket when popping a node from OPEN
-+ Alternation Queue alt(Q1,Q2...) ::
-     Maintain multiple queues and alternates opening
+     Random selection from buckets with key values e.g. $\langle g,h\rangle$
++ Alternation Queue alt(Q1,Q2...) (Roger AAAI10) ::
+     Alternates several OPEN lists
 
 * Background
 
@@ -94,9 +91,11 @@ There are a bunch of *search diversification* approaches
    \text{Error} = |h - h^*|
 \]
 
+#+begin_center
 $h$ : heuristic value, $h^*$ : perfect heuristic
 
-$h>h^*$ : Overestimation $h<h^*$ : Underestimation
+$h>h^*$ : Overestimation, $h<h^*$ : Underestimation
+#+end_center
 
 #+begin_center
 #+begin_larger
@@ -161,7 +160,7 @@ Since these errors are in the orthogonal axes, they should be treated separately
 #+end_span6
 #+begin_span6
 + *The smallest $h^*$ may have high $h$* (inter-plateau error)
-+ *selecting the minimum $h$ is not always good*
++ *Selecting the minimum $h$ is not always good*
 + *Diversifies the next $h$ to expand*
 + DBFS, Type-GBFS, $\epsilon$-greedy
 #+end_span6
@@ -182,11 +181,13 @@ It is a method whose intuition is as follows:
 #+end_span6
 #+begin_span6
 + *The smallest $h$  may have high $h^*$* (intra-plateau error)
-+ *Deterministic Tiebreaking e.g. FIFO/LIFO have a pathological cases*
++ *Deterministic Tiebreaking (e.g. FIFO/LIFO) may keep expanding high-$h^*$*
 + *Randomize the search within h-plateau* so that we (hopefully) *expand a low $h^*$ node*
 #+end_span6
 #+end_row-fluid
 #+end_container-fluid
+
+GBFS-LE has mixed effect; Local expansion is unrestricted
 
 ** Let's show!
 
@@ -202,7 +203,7 @@ It is a method whose intuition is as follows:
 
   + RandomDepth --- *Randomize <d> within plateau*
 
-    + d ≡ number of steps from the nearest ancestor w/ the same f,h
+    + d ≡ number of steps from the nearest ancestor w/ the same h
 
   + *g, h, d are all depth-related metrics*
 
@@ -232,13 +233,17 @@ Results:
 #+begin_quote
 Type GBFS: *Randomize <g,h>*
 
-RandomDepth <d> : *d ≡ number of steps from the nearest ancestor w/ the same f,h*
+RandomDepth: *Randomize <d> within plateau*
+
+　d ≡ number of steps from the nearest ancestor w/ the same h
 
 *g, h, d are all depth-related metrics*
 #+end_quote
 
 #+begin_xlarge
-Let's diversify the width!
+#+begin_center
++ Let's diversify the width!
+#+end_center
 #+end_xlarge
 
 * Pathological case for all diversification methods
@@ -457,9 +462,16 @@ Difference between BIP and IW : *IW assumes propositional states*, BIP does not
 
 #+begin_larger
 + *Two modes of diversification* --- previous methods are inter-only / mixture of two, no cleanly separated evaluation
-  + */Take-home message/: Whenever you have a diversification method, use it for both modes*
-+ *Fractal-based diversification for reducing the search width*
-  + */Take-home message/: Fractals have some potential!*
+  + */Take-home message/: Whenever you have a diversification method*, _/use it for both modes !!/_
++ *Fractal-based BIP diversification for reducing the search width*
+  + */Take-home message/:* _/Fractals have a potential !!/_
+  + 
+    #+begin_smaller
+    Future work: More fractals as search algorithms !
+    + DLA (Diffusion Limited Aggregation)
+    + BA (Ballistic Aggregation)
+    + CCA (Cluster-Cluster Aggregation)
+    #+end_smaller
 #+end_larger
 
 #+begin_center

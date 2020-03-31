@@ -326,6 +326,9 @@ blockquote {
 .vertical {
   writing-mode: vertical-rl; }
 
+.mjx-chtml {
+  padding-right: 0.2em !important; }
+
 /* ************* Positioning ************ */
 th.right, td.right {
   float: none; }
